@@ -175,7 +175,8 @@ namespace lb1
 
                 string decryptedText = VigenereDecrypt(encryptedText, key);
 
-                string generatedKey = GenerateAutokey(key, encryptedText);
+                string generatedKey = key + decryptedText.Substring(0, encryptedText.Length - key.Length);
+
                 Key_to_use.Text = generatedKey;
 
                 End.Text = decryptedText;
