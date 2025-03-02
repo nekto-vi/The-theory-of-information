@@ -12,12 +12,25 @@ namespace lb1
     {
         private bool useColumnarMethod = false;
         private bool useVigenerMethod = false;
+        private OpenFileDialog openFileDialog;
+        private SaveFileDialog saveFileDialog;
 
+        private string inputFilePath = null; 
+        private string outputFilePath = null;
         private const string RussianAlphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
 
         public Form1()
         {
             InitializeComponent();
+
+            // Инициализация диалоговых окон
+            openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
+            openFileDialog.Title = "Выберите файл для чтения";
+
+            saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
+            saveFileDialog.Title = "Выберите файл для записи";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -46,22 +59,6 @@ namespace lb1
                 useColumnarMethod = false;
             }
         }
-
-        // Прочитать файл (Read_file) кнопка
-        private void Read_file_Click(object sender, EventArgs e)
-        {
-            string filePath = "E:\\bsuir\\2 курс\\4 семестр\\ТИ\\лб1\\lb1\\info.txt";
-            if (File.Exists(filePath))
-            {
-                string content = File.ReadAllText(filePath);
-                Start.Text = FilterRussianLetters(content).ToUpper();
-            }
-            else
-            {
-                MessageBox.Show("Файл не найден.");
-            }
-        }
-
         // Окно ввода ключа (Key_to_read) окно
         private void Key_2_TextChanged(object sender, EventArgs e)
         {
@@ -71,53 +68,59 @@ namespace lb1
         // Шифровать (Encrypt) кнопка
         private void button2_Click(object sender, EventArgs e)
         {
-            // Проверяем, выбран ли метод шифрования
-            if (!useColumnarMethod && !useVigenerMethod)
+            if (string.IsNullOrEmpty(inputFilePath))
             {
-                MessageBox.Show("Выберите метод шифрования.");
+                MessageBox.Show("Сначала выберите файл для чтения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Проверяем, не пустой ли ключ
+            if (string.IsNullOrEmpty(outputFilePath))
+            {
+                MessageBox.Show("Сначала выберите файл для записи.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!useColumnarMethod && !useVigenerMethod)
+            {
+                MessageBox.Show("Выберите метод шифрования.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string key = Key_to_read.Text.Trim();
             if (string.IsNullOrEmpty(key))
             {
-                MessageBox.Show("Пожалуйста, введите ключевое слово.");
+                MessageBox.Show("Пожалуйста, введите ключевое слово.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Проверяем валидность ключа
             key = ValidateKey(key);
             if (key == null)
             {
-                MessageBox.Show("Ключ должен состоять только из русских букв.");
+                MessageBox.Show("Ключ должен состоять только из русских букв.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Выполняем шифрование в зависимости от выбранного метода
+            string plainText = File.ReadAllText(inputFilePath);
+            plainText = FilterRussianLetters(plainText).ToUpper();
+
+            string encryptedText = "";
             if (useColumnarMethod)
             {
-                string textToEncrypt = Start.Text;
-
-                Key_to_use.Text = key;
-
-                string encryptedText = ColumnarTranspositionEncrypt(textToEncrypt, key);
-                End.Text = encryptedText;
+                encryptedText = ColumnarTranspositionEncrypt(plainText, key);
             }
             else if (useVigenerMethod)
             {
-                string plainText = Start.Text;
-
                 string generatedKey = GenerateAutokey(key, plainText);
-
-                Key_to_use.Text = generatedKey;
-
-                string encryptedText = VigenereEncrypt(plainText, generatedKey);
-                End.Text = encryptedText;
+                Key_to_use.Text = generatedKey; 
+                encryptedText = VigenereEncrypt(plainText, generatedKey);
             }
+
+
+            WriteResultToFile(encryptedText);
+
+            End.Text = encryptedText;
         }
 
-        // Очистить (Clean_all) кнопка
         private void button3_Click(object sender, EventArgs e)
         {
             Start.Text = string.Empty;
@@ -135,71 +138,62 @@ namespace lb1
         // Дешифровать (Decrypt) кнопка
         private void Decrypt_Click(object sender, EventArgs e)
         {
-            // Проверяем, выбран ли метод шифрования
-            if (!useColumnarMethod && !useVigenerMethod)
+            if (string.IsNullOrEmpty(inputFilePath))
             {
-                MessageBox.Show("Выберите метод.");
+                MessageBox.Show("Сначала выберите файл для чтения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Проверяем, не пустой ли ключ
+            if (string.IsNullOrEmpty(outputFilePath))
+            {
+                MessageBox.Show("Сначала выберите файл для записи.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!useColumnarMethod && !useVigenerMethod)
+            {
+                MessageBox.Show("Выберите метод дешифрования.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             string key = Key_to_read.Text.Trim();
             if (string.IsNullOrEmpty(key))
             {
-                MessageBox.Show("Пожалуйста, введите ключевое слово.");
+                MessageBox.Show("Пожалуйста, введите ключевое слово.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Проверяем валидность ключа
             key = ValidateKey(key);
             if (key == null)
             {
-                MessageBox.Show("Ключ должен состоять только из русских букв.");
+                MessageBox.Show("Ключ должен состоять только из русских букв.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Выполняем дешифрование в зависимости от выбранного метода
+            string encryptedText = File.ReadAllText(inputFilePath);
+            encryptedText = FilterRussianLetters(encryptedText).ToUpper();
+
+            string decryptedText = "";
             if (useColumnarMethod)
             {
-                string textToDecrypt = Start.Text;
-
-                Key_to_use.Text = key;
-
-                string decryptedText = ColumnarTranspositionDecrypt(textToDecrypt, key);
-
-                End.Text = decryptedText;
+                decryptedText = ColumnarTranspositionDecrypt(encryptedText, key);
             }
             else if (useVigenerMethod)
             {
-                string encryptedText = Start.Text;
-
-                string decryptedText = VigenereDecrypt(encryptedText, key);
-
+                decryptedText = VigenereDecrypt(encryptedText, key);
                 string generatedKey = key + decryptedText.Substring(0, encryptedText.Length - key.Length);
-
-                Key_to_use.Text = generatedKey;
-
-                End.Text = decryptedText;
+                Key_to_use.Text = generatedKey; 
             }
+
+            WriteResultToFile(decryptedText);
+
+            End.Text = decryptedText;
         }
-
-        private void Key_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Start_TextChanged(object sender, EventArgs e)
         {
             Start.Text = FilterRussianLetters(Start.Text).ToUpper();
             Start.SelectionStart = Start.Text.Length; 
         }
-
-        private void Key_to_read_TextChanged(object sender, EventArgs e)
-        {
-            Key_to_read.Text = FilterRussianLetters(Key_to_read.Text).ToUpper();
-            Key_to_read.SelectionStart = Key_to_read.Text.Length; 
-        }
-
         private void End_TextChanged(object sender, EventArgs e)
         {
 
@@ -207,7 +201,6 @@ namespace lb1
 
         private string ColumnarTranspositionEncrypt(string plainText, string key)
         {
-            // Фильтруем текст и ключ, оставляя только русские буквы
             plainText = FilterRussianLetters(plainText).ToUpper();
             key = FilterRussianLetters(key).ToUpper();
 
@@ -215,7 +208,6 @@ namespace lb1
             int rowCount = (int)Math.Ceiling((double)plainText.Length / keyLength);
             char[,] table = new char[rowCount, keyLength];
 
-            // Заполняем таблицу символами
             for (int i = 0; i < rowCount; i++)
             {
                 for (int j = 0; j < keyLength; j++)
@@ -232,19 +224,17 @@ namespace lb1
                 }
             }
 
-            // Определяем порядок столбцов на основе ключа
             var order = key.Select((c, index) => new { Char = c, Index = index })
                            .OrderBy(x => x.Char)
                            .Select(x => x.Index)
                            .ToList();
 
-            // Формируем зашифрованный текст
             string encryptedText = "";
             foreach (var columnIndex in order)
             {
                 for (int i = 0; i < rowCount; i++)
                 {
-                    if (table[i, columnIndex] != ' ') 
+                    if (table[i, columnIndex] != ' ')
                     {
                         encryptedText += table[i, columnIndex];
                     }
@@ -298,7 +288,7 @@ namespace lb1
             {
                 for (int j = 0; j < keyLength; j++)
                 {
-                    if (table[i, j] != '\0') 
+                    if (table[i, j] != '\0')
                     {
                         decryptedText += table[i, j];
                     }
@@ -341,7 +331,7 @@ namespace lb1
             for (int i = 0; i < plainText.Length; i++)
             {
                 char plainChar = plainText[i];
-                char keyChar = key[i % key.Length]; 
+                char keyChar = key[i % key.Length];
 
                 int plainIndex = RussianAlphabet.IndexOf(plainChar);
                 int keyIndex = RussianAlphabet.IndexOf(keyChar);
@@ -387,7 +377,7 @@ namespace lb1
                 }
                 else
                 {
-                    decryptedText.Append(encryptedChar); 
+                    decryptedText.Append(encryptedChar);
                 }
             }
 
@@ -397,6 +387,7 @@ namespace lb1
         {
             return Regex.Replace(input, "[^А-Яа-яЁё]", "");
         }
+
         private string ValidateKey(string key)
         {
             // Фильтруем ключ, оставляя только русские буквы
@@ -410,6 +401,24 @@ namespace lb1
 
             return filteredKey.ToUpper();
         }
+        private void WriteResultToFile(string result)
+        {
+            if (string.IsNullOrEmpty(outputFilePath))
+            {
+                MessageBox.Show("Файл для записи не выбран.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                File.WriteAllText(outputFilePath, result); 
+                MessageBox.Show("Результат успешно записан в файл: " + outputFilePath, "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при записи в файл: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -419,5 +428,44 @@ namespace lb1
         {
 
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void file_to_write_Click_1(object sender, EventArgs e)
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                outputFilePath = saveFileDialog.FileName;
+                MessageBox.Show("Файл для записи выбран: " + outputFilePath, "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+
+        private void file_to_read_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                inputFilePath = openFileDialog.FileName; 
+                ReadFile(); 
+            }
+        }
+
+        private void ReadFile()
+        {
+            if (!string.IsNullOrEmpty(inputFilePath) && File.Exists(inputFilePath))
+            {
+                string content = File.ReadAllText(inputFilePath);
+                Start.Text = FilterRussianLetters(content).ToUpper();
+            }
+            else
+            {
+                MessageBox.Show("Файл для чтения не выбран или не существует.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        
     }
 }

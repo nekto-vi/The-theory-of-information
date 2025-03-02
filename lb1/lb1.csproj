@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="info.txt" />
-    <Content Include="output.txt" />
+    <Content Include="result.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

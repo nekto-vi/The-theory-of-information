@@ -30,7 +30,6 @@
         {
             this.Method_1 = new System.Windows.Forms.CheckBox();
             this.Method_2 = new System.Windows.Forms.CheckBox();
-            this.Read_file = new System.Windows.Forms.Button();
             this.Key_to_read = new System.Windows.Forms.TextBox();
             this.Text1 = new System.Windows.Forms.Label();
             this.Text2 = new System.Windows.Forms.Label();
@@ -42,13 +41,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.Key_to_use = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.file_to_read = new System.Windows.Forms.Button();
+            this.file_to_write = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Method_1
             // 
             this.Method_1.AutoSize = true;
             this.Method_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Method_1.Location = new System.Drawing.Point(28, 26);
+            this.Method_1.Location = new System.Drawing.Point(25, 26);
             this.Method_1.Name = "Method_1";
             this.Method_1.Size = new System.Drawing.Size(194, 24);
             this.Method_1.TabIndex = 2;
@@ -60,7 +63,7 @@
             // 
             this.Method_2.AutoSize = true;
             this.Method_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Method_2.Location = new System.Drawing.Point(232, 26);
+            this.Method_2.Location = new System.Drawing.Point(25, 71);
             this.Method_2.Name = "Method_2";
             this.Method_2.Size = new System.Drawing.Size(176, 24);
             this.Method_2.TabIndex = 3;
@@ -68,22 +71,11 @@
             this.Method_2.UseVisualStyleBackColor = true;
             this.Method_2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
-            // Read_file
-            // 
-            this.Read_file.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Read_file.Location = new System.Drawing.Point(414, 10);
-            this.Read_file.Name = "Read_file";
-            this.Read_file.Size = new System.Drawing.Size(128, 50);
-            this.Read_file.TabIndex = 5;
-            this.Read_file.Text = "Прочесть файл";
-            this.Read_file.UseVisualStyleBackColor = true;
-            this.Read_file.Click += new System.EventHandler(this.Read_file_Click);
-            // 
             // Key_to_read
             // 
             this.Key_to_read.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.Key_to_read.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Key_to_read.Location = new System.Drawing.Point(232, 66);
+            this.Key_to_read.Location = new System.Drawing.Point(229, 117);
             this.Key_to_read.Name = "Key_to_read";
             this.Key_to_read.Size = new System.Drawing.Size(310, 30);
             this.Key_to_read.TabIndex = 8;
@@ -93,7 +85,7 @@
             // 
             this.Text1.AutoSize = true;
             this.Text1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Text1.Location = new System.Drawing.Point(24, 156);
+            this.Text1.Location = new System.Drawing.Point(21, 207);
             this.Text1.Name = "Text1";
             this.Text1.Size = new System.Drawing.Size(234, 20);
             this.Text1.TabIndex = 9;
@@ -103,7 +95,7 @@
             // 
             this.Text2.AutoSize = true;
             this.Text2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Text2.Location = new System.Drawing.Point(24, 212);
+            this.Text2.Location = new System.Drawing.Point(21, 263);
             this.Text2.Name = "Text2";
             this.Text2.Size = new System.Drawing.Size(202, 20);
             this.Text2.TabIndex = 10;
@@ -112,7 +104,7 @@
             // Start
             // 
             this.Start.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Start.Location = new System.Drawing.Point(24, 179);
+            this.Start.Location = new System.Drawing.Point(21, 230);
             this.Start.Name = "Start";
             this.Start.Size = new System.Drawing.Size(518, 30);
             this.Start.TabIndex = 11;
@@ -121,7 +113,7 @@
             // End
             // 
             this.End.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.End.Location = new System.Drawing.Point(24, 235);
+            this.End.Location = new System.Drawing.Point(21, 286);
             this.End.Name = "End";
             this.End.Size = new System.Drawing.Size(518, 30);
             this.End.TabIndex = 12;
@@ -130,7 +122,7 @@
             // Decrypt
             // 
             this.Decrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Decrypt.Location = new System.Drawing.Point(224, 288);
+            this.Decrypt.Location = new System.Drawing.Point(221, 339);
             this.Decrypt.Name = "Decrypt";
             this.Decrypt.Size = new System.Drawing.Size(194, 35);
             this.Decrypt.TabIndex = 13;
@@ -141,7 +133,7 @@
             // Encrypt
             // 
             this.Encrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Encrypt.Location = new System.Drawing.Point(24, 288);
+            this.Encrypt.Location = new System.Drawing.Point(21, 339);
             this.Encrypt.Name = "Encrypt";
             this.Encrypt.Size = new System.Drawing.Size(194, 35);
             this.Encrypt.TabIndex = 14;
@@ -152,7 +144,7 @@
             // Clear_all
             // 
             this.Clear_all.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Clear_all.Location = new System.Drawing.Point(424, 288);
+            this.Clear_all.Location = new System.Drawing.Point(421, 339);
             this.Clear_all.Name = "Clear_all";
             this.Clear_all.Size = new System.Drawing.Size(118, 35);
             this.Clear_all.TabIndex = 15;
@@ -164,7 +156,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(24, 115);
+            this.label1.Location = new System.Drawing.Point(21, 166);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(182, 20);
             this.label1.TabIndex = 16;
@@ -174,7 +166,7 @@
             // Key_to_use
             // 
             this.Key_to_use.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Key_to_use.Location = new System.Drawing.Point(232, 108);
+            this.Key_to_use.Location = new System.Drawing.Point(229, 159);
             this.Key_to_use.Name = "Key_to_use";
             this.Key_to_use.Size = new System.Drawing.Size(310, 30);
             this.Key_to_use.TabIndex = 17;
@@ -184,17 +176,62 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(24, 73);
+            this.label2.Location = new System.Drawing.Point(21, 124);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(58, 20);
             this.label2.TabIndex = 18;
             this.label2.Text = "Ключ:";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(241, 27);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(120, 20);
+            this.label3.TabIndex = 19;
+            this.label3.Text = "Прочесть из:";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(241, 72);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(110, 20);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "Записать в:";
+            // 
+            // file_to_read
+            // 
+            this.file_to_read.Location = new System.Drawing.Point(367, 19);
+            this.file_to_read.Name = "file_to_read";
+            this.file_to_read.Size = new System.Drawing.Size(172, 38);
+            this.file_to_read.TabIndex = 21;
+            this.file_to_read.Text = "выбрать файл";
+            this.file_to_read.UseVisualStyleBackColor = true;
+            this.file_to_read.Click += new System.EventHandler(this.file_to_read_Click);
+            // 
+            // file_to_write
+            // 
+            this.file_to_write.Location = new System.Drawing.Point(367, 63);
+            this.file_to_write.Name = "file_to_write";
+            this.file_to_write.Size = new System.Drawing.Size(172, 39);
+            this.file_to_write.TabIndex = 23;
+            this.file_to_write.Text = "выбрать файл";
+            this.file_to_write.UseVisualStyleBackColor = true;
+            this.file_to_write.Click += new System.EventHandler(this.file_to_write_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(567, 344);
+            this.ClientSize = new System.Drawing.Size(567, 389);
+            this.Controls.Add(this.file_to_write);
+            this.Controls.Add(this.file_to_read);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Key_to_use);
             this.Controls.Add(this.label1);
@@ -206,7 +243,6 @@
             this.Controls.Add(this.Text2);
             this.Controls.Add(this.Text1);
             this.Controls.Add(this.Key_to_read);
-            this.Controls.Add(this.Read_file);
             this.Controls.Add(this.Method_2);
             this.Controls.Add(this.Method_1);
             this.Name = "Form1";
@@ -219,7 +255,6 @@
 
         #endregion
         private System.Windows.Forms.CheckBox Method_2;
-        private System.Windows.Forms.Button Read_file;
         private System.Windows.Forms.TextBox Key_to_read;
         private System.Windows.Forms.Label Text1;
         private System.Windows.Forms.Label Text2;
@@ -232,6 +267,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox Key_to_use;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button file_to_read;
+        private System.Windows.Forms.Button file_to_write;
     }
 }
 
